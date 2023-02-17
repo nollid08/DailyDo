@@ -1,8 +1,10 @@
 // Create a Form widget.
+import 'package:daily_do/controllers/tasks.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TaskInput extends StatefulWidget {
-  const TaskInput({super.key});
+class TaskInput extends ConsumerStatefulWidget {
+  const TaskInput({Key? key}) : super(key: key);
 
   @override
   TaskInputState createState() {
@@ -12,7 +14,7 @@ class TaskInput extends StatefulWidget {
 
 // Create a corresponding State class.
 // This class holds data related to the form.
-class TaskInputState extends State<TaskInput> {
+class TaskInputState extends ConsumerState<TaskInput> {
   // Create a global key that uniquely identifies the Form widget
   // and allows validation of the form.
   //
@@ -58,6 +60,9 @@ class TaskInputState extends State<TaskInput> {
                       const SnackBar(content: Text('Adding Task...')),
                     );
                   }
+                  ref
+                      .read(taskListProvider.notifier)
+                      .add('Buy Some Golden Milk');
                 },
                 child: const Text('Submit'),
               ),

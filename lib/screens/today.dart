@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../controllers/tasks.dart';
 import '../widgets/task_entry.dart';
 import '../widgets/task_input.dart';
 
-class Today extends StatelessWidget {
+class Today extends ConsumerWidget {
   const Today({super.key});
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final taskList = ref.watch(taskListProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -14,24 +16,18 @@ class Today extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: ListView(
-        children: [
-          TaskEntry(
-            title: 'Buy Porridge',
+      body: ListView.builder(
+        itemBuilder: (BuildContext context, int index) {
+          return TaskEntry(
+            title: taskList[index].title,
             onAccepted: () => print('Task Completed'),
             onRemoved: () => print('Task Removed'),
-          ),
-          TaskEntry(
-            title: 'Cook Dinner',
-            onAccepted: () => print('Task Completed'),
-            onRemoved: () => print('Task Removed'),
-          ),
-          TaskEntry(
-            title: 'Visit Nana',
-            onAccepted: () => print('Task Completed'),
-            onRemoved: () => print('Task Removed'),
-          ),
-        ],
+          );
+        },
+        itemCount: taskList.length,
+        // [
+
+        // ],
       ),
       floatingActionButton: FloatingActionButton(onPressed: () {
         showModalBottomSheet<void>(
