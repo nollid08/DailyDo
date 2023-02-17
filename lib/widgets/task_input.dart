@@ -3,27 +3,21 @@ import 'package:daily_do/controllers/tasks.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TaskInput extends ConsumerStatefulWidget {
-  const TaskInput({Key? key}) : super(key: key);
+class TaskInput extends ConsumerWidget {
+  TaskInput({super.key});
 
-  @override
-  TaskInputState createState() {
-    return TaskInputState();
-  }
-}
-
-// Create a corresponding State class.
-// This class holds data related to the form.
-class TaskInputState extends ConsumerState<TaskInput> {
   // Create a global key that uniquely identifies the Form widget
   // and allows validation of the form.
   //
   // Note: This is a GlobalKey<FormState>,
   // not a GlobalKey<TaskInputState>.
   final _formKey = GlobalKey<FormState>();
+  // Create a text controller to use it to retrieve the current value
+  // of the TextField.
+  final taskTitleController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // Build a Form widget using the _formKey created above.
     return Form(
       key: _formKey,
@@ -34,12 +28,12 @@ class TaskInputState extends ConsumerState<TaskInput> {
           children: [
             Expanded(
               child: TextFormField(
+                controller: taskTitleController,
                 autofocus: true,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Enter your task',
                 ),
-                // The validator receives the text that the user has entered.
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a task!';
@@ -52,17 +46,11 @@ class TaskInputState extends ConsumerState<TaskInput> {
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
                 onPressed: () {
-                  // Validate returns true if the form is valid, or false otherwise.
                   if (_formKey.currentState!.validate()) {
-                    // If the form is valid, display a snackbar. In the real world,
-                    // you'd often call a server or save the information in a database.
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Adding Task...')),
-                    );
+                    ref
+                        .read(taskListProvider.notifier)
+                        .add(taskTitleController.text);
                   }
-                  ref
-                      .read(taskListProvider.notifier)
-                      .add('Buy Some Golden Milk');
                 },
                 child: const Text('Submit'),
               ),

@@ -43,7 +43,7 @@ class Today extends ConsumerWidget {
             return Padding(
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: const SizedBox(height: 200, child: TaskInput()),
+              child: SizedBox(height: 200, child: TaskInput()),
             );
           },
         );
