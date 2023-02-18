@@ -16,6 +16,13 @@ class TaskInput extends ConsumerWidget {
   // of the TextField.
   final taskTitleController = TextEditingController();
 
+  String? validatorForMissingFields(String? input) {
+    if (input == null || input.isEmpty || input.trim().isEmpty) {
+      return "Mandatory field";
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Build a Form widget using the _formKey created above.
@@ -28,19 +35,13 @@ class TaskInput extends ConsumerWidget {
           children: [
             Expanded(
               child: TextFormField(
-                controller: taskTitleController,
-                autofocus: true,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Enter your task',
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a task!';
-                  }
-                  return null;
-                },
-              ),
+                  controller: taskTitleController,
+                  autofocus: true,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Enter your task',
+                  ),
+                  validator: validatorForMissingFields),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
