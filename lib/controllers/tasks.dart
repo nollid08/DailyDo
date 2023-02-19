@@ -6,9 +6,23 @@ const _uuid = Uuid();
 
 final taskListProvider = StateNotifierProvider<TaskList, List<Task>>((ref) {
   return TaskList(const [
-    Task(id: 'task-0', title: 'Buy Porridge'),
-    Task(id: 'task-1', title: 'Cook Dinner'),
-    Task(id: 'task-2', title: 'Book Train'),
+    Task(
+      id: 'task-0',
+      title: 'Buy Porridge',
+      recursDaily: false,
+    ),
+    Task(
+      id: 'task-1',
+      title: 'Cook Dinner',
+      recursDaily: true,
+    ),
+    Task(
+      id: 'task-2',
+      title: 'Book Train',
+      recursDaily: false,
+      description:
+          'Book the train, leaving after 2:00 from Connolly Station To Mallow',
+    ),
   ]);
 });
 
@@ -18,11 +32,15 @@ class Task {
   const Task({
     required this.title,
     required this.id,
+    required this.recursDaily,
+    this.description,
     this.completed = false,
   });
 
   final String id;
   final String title;
+  final String? description;
+  final bool recursDaily;
   final bool completed;
 
   @override
@@ -35,12 +53,15 @@ class Task {
 class TaskList extends StateNotifier<List<Task>> {
   TaskList([List<Task>? initialTasks]) : super(initialTasks ?? []);
 
-  void add(String title) {
+  void add(
+      {required String title, required bool recursDaily, String? description}) {
     state = [
       ...state,
       Task(
         id: _uuid.v4(),
         title: title,
+        recursDaily: recursDaily,
+        description: description,
       ),
     ];
   }
@@ -53,13 +74,15 @@ class TaskList extends StateNotifier<List<Task>> {
             id: task.id,
             completed: !task.completed,
             title: task.title,
+            recursDaily: task.recursDaily,
           )
         else
           task,
     ];
   }
 
-  void edit({required String id, required String title}) {
+  void edit(
+      {required String id, required String title, required bool recursDaily}) {
     state = [
       for (final task in state)
         if (task.id == id)
@@ -67,6 +90,7 @@ class TaskList extends StateNotifier<List<Task>> {
             id: task.id,
             completed: task.completed,
             title: title,
+            recursDaily: recursDaily,
           )
         else
           task,

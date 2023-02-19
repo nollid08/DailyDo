@@ -20,34 +20,30 @@ class Today extends ConsumerWidget {
         itemBuilder: (BuildContext context, int index) {
           return TaskEntry(
             title: taskList[index].title,
+            recursDaily: taskList[index].recursDaily,
+            description: taskList[index].description,
             onAccepted: () => print('Task Completed'),
             onRemoved: () => print('Task Removed'),
           );
         },
         itemCount: taskList.length,
-        // [
-
-        // ],
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        showModalBottomSheet<void>(
-          // context and builder are
-          // required properties in this widget
-          context: context,
-          isScrollControlled: true,
-          builder: (BuildContext context) {
-            // we set up a container inside which
-            // we create center column and display text
-
-            // Returning SizedBox instead of a Container
-            return Padding(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: SizedBox(height: 200, child: TaskInput()),
-            );
-          },
-        );
-      }),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () {
+          showModalBottomSheet<void>(
+            context: context,
+            isScrollControlled: true,
+            builder: (BuildContext context) {
+              return Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: const SizedBox(height: 350, child: TaskInput()),
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }

@@ -4,11 +4,15 @@ class TaskEntry extends StatelessWidget {
   const TaskEntry({
     super.key,
     required this.title,
+    required this.recursDaily,
+    required this.description,
     required this.onAccepted,
     required this.onRemoved,
   });
 
   final String title;
+  final String? description;
+  final bool recursDaily;
   final VoidCallback onAccepted;
   final VoidCallback onRemoved;
 
@@ -19,39 +23,43 @@ class TaskEntry extends StatelessWidget {
         vertical: 5,
         horizontal: 10,
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
         children: [
-          Text(
-            title,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              fontWeight: FontWeight.w400,
-              fontSize: 20,
-            ),
-          ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              IconButton(
-                icon: const Icon(
-                  Icons.cancel,
+              Text(
+                title,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 20,
                 ),
-                padding: EdgeInsetsDirectional.zero,
-                iconSize: 50,
-                color: Colors.red,
-                onPressed: onRemoved,
-                alignment: AlignmentDirectional.center,
               ),
-              IconButton(
-                icon: const Icon(
-                  Icons.check_circle,
-                ),
-                padding: EdgeInsetsDirectional.zero,
-                iconSize: 50,
-                color: Colors.green,
-                onPressed: onAccepted,
-                alignment: AlignmentDirectional.center,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: const Icon(
+                      Icons.cancel,
+                    ),
+                    padding: EdgeInsetsDirectional.zero,
+                    iconSize: 50,
+                    color: Colors.red,
+                    onPressed: onRemoved,
+                    alignment: AlignmentDirectional.center,
+                  ),
+                  IconButton(
+                    icon: const Icon(
+                      Icons.check_circle,
+                    ),
+                    padding: EdgeInsetsDirectional.zero,
+                    iconSize: 50,
+                    color: Colors.green,
+                    onPressed: onAccepted,
+                    alignment: AlignmentDirectional.center,
+                  ),
+                ],
               ),
             ],
           ),
