@@ -49,6 +49,16 @@ class TaskEntry extends StatelessWidget {
                     onPressed: onRemoved,
                     alignment: AlignmentDirectional.center,
                   ),
+                  ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      shape: const CircleBorder(),
+                      padding: const EdgeInsets.all(10),
+                      backgroundColor: Colors.orange, // <-- Button color
+                      foregroundColor: Colors.orangeAccent, // <-- Splash color
+                    ),
+                    child: const Icon(Icons.send, color: Colors.white),
+                  ),
                   IconButton(
                     icon: const Icon(
                       Icons.check_circle,

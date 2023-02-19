@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart' show immutable;
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
@@ -34,18 +35,20 @@ class Task {
     required this.id,
     required this.recursDaily,
     this.description,
+    this.reminder,
     this.completed = false,
   });
 
   final String id;
   final String title;
   final String? description;
+  final TimeOfDay? reminder;
   final bool recursDaily;
   final bool completed;
 
   @override
   String toString() {
-    return 'Task(title: $title, completed: $completed)';
+    return 'Task(title: $title, description: $description, reminder: $reminder, recursDaily: $recursDaily completed: $completed)';
   }
 }
 
@@ -54,15 +57,22 @@ class TaskList extends StateNotifier<List<Task>> {
   TaskList([List<Task>? initialTasks]) : super(initialTasks ?? []);
 
   void add(
-      {required String title, required bool recursDaily, String? description}) {
+      {required String title,
+      required bool recursDaily,
+      String? description,
+      TimeOfDay? reminder}) {
+    // DEBUG ONLY: Remove var and add directly when print is no longer needed
+    Task newTask = Task(
+      id: _uuid.v4(),
+      title: title,
+      recursDaily: recursDaily,
+      description: description,
+      reminder: reminder,
+    );
+    print(newTask.toString());
     state = [
       ...state,
-      Task(
-        id: _uuid.v4(),
-        title: title,
-        recursDaily: recursDaily,
-        description: description,
-      ),
+      newTask,
     ];
   }
 

@@ -21,7 +21,8 @@ class TaskInputState extends ConsumerState<TaskInput> {
   final taskTitleController = TextEditingController();
   final taskDescriptionController = TextEditingController();
 
-  bool isDaily = true;
+  bool recursDaily = true;
+  TimeOfDay? reminder;
 
   String? validatorForMissingFields(String? input) {
     if (input == null || input.isEmpty || input.trim().isEmpty) {
@@ -60,11 +61,12 @@ class TaskInputState extends ConsumerState<TaskInput> {
                         print(taskDescriptionController.text.isNotEmpty);
                         ref.read(taskListProvider.notifier).add(
                               title: taskTitleController.text,
-                              recursDaily: isDaily,
+                              recursDaily: recursDaily,
                               description:
                                   taskDescriptionController.text.isNotEmpty
                                       ? taskDescriptionController.text
                                       : null,
+                              reminder: reminder,
                             );
                       }
                     },
@@ -99,13 +101,53 @@ class TaskInputState extends ConsumerState<TaskInput> {
                   children: [
                     SwitchListTile(
                       title: const Text('Daily'),
-                      value: isDaily,
+                      value: recursDaily,
                       onChanged: (bool? value) {
                         setState(() {
-                          isDaily = value ?? false;
+                          recursDaily = value ?? false;
                         });
                       },
-                    )
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        reminder = await showTimePicker(
+                          initialTime: TimeOfDay.now(),
+                          context: context,
+                        );
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          const Icon(Icons.notification_add,
+                              color: Colors.white),
+                          Text(reminder != null
+                              ? reminder!.format(context)
+                              : 'Add A Reminder')
+                        ],
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        DateTime? scheduleDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime.utc(
+                            DateTime.now().year + 5,
+                            DateTime.now().month,
+                            DateTime.now().day,
+                          ),
+                        );
+                        print(scheduleDate);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: const [
+                          Icon(Icons.send, color: Colors.white),
+                          Text('Schedule')
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
