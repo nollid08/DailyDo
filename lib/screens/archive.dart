@@ -1,15 +1,17 @@
-import 'package:daily_do/screens/archive.dart';
+import 'package:daily_do/screens/today.dart';
+
+import '../widgets/archive_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../controllers/tasks.dart';
-import '../widgets/task_list_item.dart';
+import 'package:intl/intl.dart';
 import '../widgets/task_input.dart';
 
-class Today extends ConsumerWidget {
-  const Today({super.key});
+class Archive extends ConsumerWidget {
+  const Archive({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final taskList = ref.watch(taskListProvider);
+    final archivedTaskLists = ref.watch(archivedTaskListsProvider);
     return Scaffold(
       drawer: Drawer(
         child: ListView(
@@ -26,7 +28,6 @@ class Today extends ConsumerWidget {
               leading: const Icon(
                 Icons.home,
               ),
-              enabled: false,
               title: const Text("Today's Tasks"),
               onTap: () {
                 Navigator.of(context).push(
@@ -41,6 +42,7 @@ class Today extends ConsumerWidget {
               leading: const Icon(
                 Icons.archive,
               ),
+              enabled: false,
               title: const Text('Archive'),
               onTap: () {
                 Navigator.of(context).push(
@@ -61,15 +63,14 @@ class Today extends ConsumerWidget {
       ),
       body: ListView.builder(
         itemBuilder: (BuildContext context, int index) {
-          return TaskEntry(
-            title: taskList[index].title,
-            recursDaily: taskList[index].recursDaily,
-            description: taskList[index].description,
-            onAccepted: () => print('Task Completed'),
-            onRemoved: () => print('Task Removed'),
+          DateTime date = archivedTaskLists[index].date;
+          final DateFormat formatter = DateFormat.yMMMMd();
+          String formattedDate = formatter.format(date);
+          return ArchiveEntry(
+            title: formattedDate,
           );
         },
-        itemCount: taskList.length,
+        itemCount: archivedTaskLists.length,
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
